@@ -74,7 +74,7 @@ public class DocumentCollection implements Serializable{
 
     private boolean isNoiseWord(String word){
         for(String noise: noiseWordArray){
-            if(word == noise){
+            if(word.equals(noise) || word.length() <= 1){
                 return true;
             }
         }
@@ -84,40 +84,47 @@ public class DocumentCollection implements Serializable{
     public DocumentCollection(String filepath) {
         documents = new HashMap<>();
         int dId = 0;
+        StringBuilder docText = new StringBuilder();
+        boolean collectDoc = false;
     
         try {
             Scanner scanner = new Scanner(new File(filepath));
     
             while (scanner.hasNextLine()) {
-                String[] line = scanner.nextLine().trim().split(" ");
-                if (line[0].equals(".I")) {
-                    dId = Integer.parseInt(line[1]);
-                }
-    
-                if (line[0].equals(".W")) {
-                    StringBuilder docText = new StringBuilder();
-    
-                    while (scanner.hasNextLine()) {
-                        String nextLine = scanner.nextLine().trim();
-                        if (nextLine.startsWith(".I")) {
-                            break;
+                String line = scanner.nextLine().trim();
+                if (line.startsWith(".I")) {
+                    if(dId != 0){
+                        String[] words = docText.toString().split("[^a-zA-Z]+");
+                        TextVector rawVector = new TextVector();
+                        for (String word : words) {
+                            word = word.toLowerCase();
+                            if (!isNoiseWord(word)) {
+                                rawVector.add(word);
+                            }
                         }
-    
-                        docText.append(nextLine).append(" ");
+                        documents.put(dId, rawVector);
+                        docText = new StringBuilder();
                     }
-    
-                    String[] words = docText.toString().split("[^a-zA-Z]+");
-                    TextVector rawVector = new TextVector();
-    
-                    for (String word : words) {
-                        word = word.toLowerCase();
-                        if (!isNoiseWord(word)) {
-                            rawVector.add(word);
-                        }
-                    }
-    
-                    documents.put(dId, rawVector);
+                    dId = Integer.parseInt(line.substring(3));
+                    collectDoc = false;
                 }
+                else if(line.startsWith(".W")){
+                    collectDoc = true;
+                }
+                else if(collectDoc){
+                    docText.append(line).append(" ");
+                }
+                }
+            if (docText.length() > 0) {
+                String[] words = docText.toString().split("[^a-zA-Z]+");
+                TextVector rawVector = new TextVector();
+                for (String word : words) {
+                    word = word.toLowerCase();
+                    if (!isNoiseWord(word)) {
+                        rawVector.add(word);
+                    }
+                }
+                documents.put(dId, rawVector);
             }
     
             scanner.close();
@@ -126,55 +133,5 @@ public class DocumentCollection implements Serializable{
             System.out.println("File not found: " + filepath);
         }
     }
-
-    // public DocumentCollection(String filepath) {
-    //     documents = new HashMap<>();
-    //     int dId = 0;
-    
-    //     try {
-    //         Scanner scanner = new Scanner(new File(filepath));
-    
-    //         while (scanner.hasNextLine()) {
-    //             String[] line = scanner.nextLine().trim().split(" ");
-    //             if (line[0].equals(".I")) {
-    //                 dId = Integer.parseInt(line[1]);
-    //             }
-    
-    //             if (line[0].equals(".W")) {
-    //                 StringBuilder docText = new StringBuilder();
-    
-    //                 while (scanner.hasNextLine()) {
-    //                     String nextLine = scanner.nextLine().trim();
-    //                     if (nextLine.startsWith(".I")) {
-    //                         break;
-    //                     }
-    
-    //                     docText.append(nextLine).append(" ");
-    //                 }
-    
-    //                 String[] words = docText.toString().split("[^a-zA-Z]+");
-    //                 TextVector rawVector = new TextVector();
-    
-    //                 for (String word : words) {
-    //                     word = word.toLowerCase();
-    //                     if (!isNoiseWord(word)) {
-    //                         rawVector.add(word);
-    //                     }
-    //                 }
-    
-    //                 documents.put(dId, rawVector);
-    //             }
-    //         }
-    
-    //         scanner.close();
-    
-    //     } catch (FileNotFoundException e) {
-    //         System.out.println("File not found: " + filepath);
-    //     }
-    // }
-    
-
-    
-
 
 }

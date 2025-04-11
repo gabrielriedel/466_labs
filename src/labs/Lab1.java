@@ -10,17 +10,14 @@ import src.DocumentClasses.TextVector;
 public class Lab1 {
 
     public static void main(String args[]){
-        System.out.println(System.getProperty("user.dir"));
 
-        DocumentCollection docs = new DocumentCollection("466_labs/files/documents.txt");
+        DocumentCollection docs = new DocumentCollection("./files/documents.txt");
 
         int maxFreq = 0;
         String mostFreqWord = "";
         int distinctWordCount = 0;
         int totalWordCount = 0;
         for(TextVector text: docs.getDocuments()){
-            System.out.println(docs.getEntrySet());
-            text.documentReport();
             distinctWordCount += text.getDistinctWordCount(); 
             totalWordCount += text.getTotalWordCount();
             if(text.getHighestRawFrequency() > maxFreq){

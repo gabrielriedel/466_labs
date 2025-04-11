@@ -22,12 +22,13 @@ public class TextVector implements Serializable{
     }
 
     public void documentReport(){
-        String doc = "";
+        //String doc = "";
 
         for(String word : rawVector.keySet()){
-            doc += word + " ";
+            System.out.println(word);
+            //doc += word + " ";
         }
-        System.out.println(doc);
+        //System.out.println(doc);
     }
 
     public void add(String word){
