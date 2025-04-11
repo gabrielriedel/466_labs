@@ -21,16 +21,6 @@ public class TextVector implements Serializable{
 
     }
 
-    public void documentReport(){
-        //String doc = "";
-
-        for(String word : rawVector.keySet()){
-            System.out.println(word);
-            //doc += word + " ";
-        }
-        //System.out.println(doc);
-    }
-
     public void add(String word){
         // adds a word to the rawVector. If the word is not new, 
         // frequency is incremented by one.
