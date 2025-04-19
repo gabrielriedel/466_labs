@@ -1,11 +1,12 @@
 package src.DocumentClasses;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class TextVector implements Serializable{
+public abstract class TextVector implements Serializable{
 
     private HashMap<String, Integer> rawVector; 
 
@@ -14,9 +15,6 @@ public class TextVector implements Serializable{
     }
 
     public Set<Map.Entry<String, Integer>> getRawVectorEntrySet(){
-        // returns an object of type Set<Map.Entry<String, Integer>>. 
-        // This is a mapping from each word to its frequency. 
-        // Use the method entrySet on the HashMap to get the result.
         return rawVector.entrySet();
 
     }
@@ -85,6 +83,22 @@ public class TextVector implements Serializable{
             }
         }
         return max_word;
+    }
+
+    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
+
+    public abstract void normalize(DocumentCollection dc);
+
+    public abstract double getNormalizedFrequency(String word);
+
+    public double getL2Norm(){
+        double normFreq = 0.0;
+        return normFreq;
+    }
+
+    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg){
+        ArrayList<Integer> result = new ArrayList<>();
+        return result;
     }
  }
 
