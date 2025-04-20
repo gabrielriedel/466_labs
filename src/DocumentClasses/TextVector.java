@@ -92,9 +92,12 @@ public abstract class TextVector implements Serializable{
     public abstract double getNormalizedFrequency(String word);
 
     public double getL2Norm(){
-        double normFreq = 0.0;
-        return normFreq;
-    }
+        double sumFreq = 0.0;
+        for(String word : rawVector.keySet()){
+            sumFreq += this.getNormalizedFrequency(word);
+        }
+        return Math.sqrt(sumFreq);
+    }   
 
     public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg){
         ArrayList<Integer> result = new ArrayList<>();
