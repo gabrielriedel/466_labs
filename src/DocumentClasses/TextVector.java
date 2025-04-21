@@ -3,6 +3,7 @@ package src.DocumentClasses;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,16 +92,29 @@ public abstract class TextVector implements Serializable{
 
     public abstract double getNormalizedFrequency(String word);
 
-    public double getL2Norm(){
-        double sumFreq = 0.0;
-        for(String word : rawVector.keySet()){
-            sumFreq += this.getNormalizedFrequency(word);
+    public double getL2Norm() {
+        double sumSq = 0.0;
+        for (Map.Entry<String, Double> entry : this.getNormalizedVectorEntrySet()) {
+            sumSq += Math.pow(entry.getValue(), 2);
         }
-        return Math.sqrt(sumFreq);
+        return Math.sqrt(sumSq);
     }   
 
     public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg){
+        HashMap <Integer, Double> distMap = new HashMap<>();
+        for(Map.Entry<Integer, TextVector> entry : documents.getEntrySet()){
+            TextVector doc = entry.getValue();
+            int doc_id = entry.getKey();
+            distMap.put(doc_id, distanceAlg.findDistance(this, doc, documents));
+        }
+
+        List<Map.Entry<Integer, Double>> sortedEntries = new ArrayList<>(distMap.entrySet());
+        sortedEntries.sort(Map.Entry.comparingByValue());
+
         ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            result.add(sortedEntries.get(i).getKey());
+        }
         return result;
     }
  }

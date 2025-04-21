@@ -95,7 +95,7 @@ public class DocumentCollection implements Serializable{
                 if (line.startsWith(".I")) {
                     if(dId != 0){
                         String[] words = docText.toString().split("[^a-zA-Z]+");
-                        TextVector rawVector = new TextVector();
+                        TextVector rawVector = new DocumentVector();
                         for (String word : words) {
                             word = word.toLowerCase();
                             if (!isNoiseWord(word)) {
@@ -117,7 +117,7 @@ public class DocumentCollection implements Serializable{
                 }
             if (docText.length() > 0) {
                 String[] words = docText.toString().split("[^a-zA-Z]+");
-                TextVector rawVector = new TextVector();
+                TextVector rawVector = new DocumentVector();
                 for (String word : words) {
                     word = word.toLowerCase();
                     if (!isNoiseWord(word)) {
