@@ -81,7 +81,14 @@ public class DocumentCollection implements Serializable{
         return false;
     }
 
-    public DocumentCollection(String filepath) {
+    public void normalize(DocumentCollection dc){
+        for(TextVector doc : documents.values()){
+            doc.normalize(dc);
+        }
+    }
+
+    public DocumentCollection(String filepath, String type) {
+        TextVector rawVector = type.equals("document") ? new DocumentVector() : new QueryVector();
         documents = new HashMap<>();
         int dId = 0;
         StringBuilder docText = new StringBuilder();
@@ -95,7 +102,6 @@ public class DocumentCollection implements Serializable{
                 if (line.startsWith(".I")) {
                     if(dId != 0){
                         String[] words = docText.toString().split("[^a-zA-Z]+");
-                        TextVector rawVector = new DocumentVector();
                         for (String word : words) {
                             word = word.toLowerCase();
                             if (!isNoiseWord(word)) {
@@ -117,7 +123,6 @@ public class DocumentCollection implements Serializable{
                 }
             if (docText.length() > 0) {
                 String[] words = docText.toString().split("[^a-zA-Z]+");
-                TextVector rawVector = new DocumentVector();
                 for (String word : words) {
                     word = word.toLowerCase();
                     if (!isNoiseWord(word)) {
@@ -133,5 +138,7 @@ public class DocumentCollection implements Serializable{
             System.out.println("File not found: " + filepath);
         }
     }
+
+
 
 }

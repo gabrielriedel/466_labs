@@ -30,7 +30,7 @@ public class QueryVector extends TextVector{
                 normalizedVector.put(word, 0.0);
             }
             else{
-                idf = Math.log((double)dc.getSize()/doc_count);
+                idf = Math.log((double)dc.getSize()/doc_count)/Math.log(2);
                 normalizedVector.put(word, tf*idf);
             }
         }

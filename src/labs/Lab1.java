@@ -11,7 +11,7 @@ public class Lab1 {
 
     public static void main(String args[]){
 
-        DocumentCollection docs = new DocumentCollection("./files/documents.txt");
+        DocumentCollection docs = new DocumentCollection("./files/documents.txt", "document");
 
         int maxFreq = 0;
         String mostFreqWord = "";
