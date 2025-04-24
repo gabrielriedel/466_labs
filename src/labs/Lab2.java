@@ -26,20 +26,19 @@ public class Lab2 {
 
         queries = new DocumentCollection("./files/queries.txt", "query");
         queries.normalize(documents);
+        documents.normalize(documents);
 
         CosineDistance distanceAlg = new CosineDistance();
         HashMap<Integer, ArrayList<Integer>> closeDocs = new HashMap<>();
         for(Map.Entry<Integer, TextVector> entry : queries.getEntrySet()){
             TextVector query = entry.getValue();
-            query.findClosestDocuments(documents, distanceAlg);
             closeDocs.put(entry.getKey(), query.findClosestDocuments(documents, distanceAlg));
         }
 
-        ArrayList<Integer> first_close_docs = closeDocs.get(1);
-
-        for(int closeness : first_close_docs){
-            System.out.println("DOC:" + closeness);
+        for(Map.Entry<Integer, ArrayList<Integer>> entry : closeDocs.entrySet()){
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
+
     }
 
 }

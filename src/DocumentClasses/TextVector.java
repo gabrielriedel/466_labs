@@ -109,7 +109,7 @@ public abstract class TextVector implements Serializable{
         }
 
         List<Map.Entry<Integer, Double>> sortedEntries = new ArrayList<>(distMap.entrySet());
-        sortedEntries.sort(Map.Entry.comparingByValue());
+        sortedEntries.sort(Map.Entry.<Integer, Double>comparingByValue().reversed());
 
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

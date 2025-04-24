@@ -21,7 +21,7 @@ public class QueryVector extends TextVector{
         for(Map.Entry<String,Integer> entry : super.getRawVectorEntrySet()){
             doc_count = 0.0;
             word = entry.getKey();
-            tf = 0.5+0.5*(super.getRawFrequency(word)/super.getDistinctWordCount());
+            tf = 0.5+0.5*((double) super.getRawFrequency(word)/super.getHighestRawFrequency());
             for(TextVector doc : dc.getDocuments()){
                 if(doc.contains(word))
                 doc_count += 1;

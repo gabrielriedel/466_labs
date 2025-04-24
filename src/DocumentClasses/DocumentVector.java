@@ -20,7 +20,7 @@ public class DocumentVector extends TextVector{
         for(Map.Entry<String,Integer> entry : super.getRawVectorEntrySet()){
             doc_count = 0.0;
             word = entry.getKey();
-            tf = super.getRawFrequency(word)/super.getDistinctWordCount();
+            tf = ((double) super.getRawFrequency(word))/super.getDistinctWordCount();
             for(TextVector doc : dc.getDocuments()){
                 if(doc.contains(word))
                 doc_count += 1;
