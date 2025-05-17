@@ -91,6 +91,7 @@ public class DocumentCollection implements Serializable{
     public DocumentCollection(String filepath, String type) {
         documents = new HashMap<>();
         int dId = 0;
+        int actualId = 0;
         StringBuilder docText = new StringBuilder();
         boolean collectDoc = false;
     
@@ -109,7 +110,8 @@ public class DocumentCollection implements Serializable{
                                 rawVector.add(word);
                             }
                         }
-                        documents.put(dId, rawVector);
+                        actualId +=1;
+                        documents.put(actualId, rawVector);
                         docText = new StringBuilder();
                     }
                     dId = Integer.parseInt(line.substring(3));
@@ -131,7 +133,8 @@ public class DocumentCollection implements Serializable{
                         rawVector.add(word);
                     }
                 }
-                documents.put(dId, rawVector);
+                actualId +=1;
+                documents.put(actualId, rawVector);
             }
     
             scanner.close();

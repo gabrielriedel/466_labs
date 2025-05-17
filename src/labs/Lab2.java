@@ -2,10 +2,12 @@ package src.labs;
 
 import java.io.File;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import src.DocumentClasses.CosineDistance;
 import src.DocumentClasses.DocumentCollection;
@@ -38,6 +40,13 @@ public class Lab2 {
         for(Map.Entry<Integer, ArrayList<Integer>> entry : closeDocs.entrySet()){
             System.out.println(entry.getKey() + " " + entry.getValue());
         }
+
+        try(ObjectOutputStream os = new ObjectOutputStream(new
+                    FileOutputStream(new File("./files/cosinemap")))){
+        os.writeObject(closeDocs);
+        } catch(Exception e){
+            System.out.println(e);
+            }
 
     }
 
