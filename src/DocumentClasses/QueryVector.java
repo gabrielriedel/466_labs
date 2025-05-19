@@ -16,21 +16,14 @@ public class QueryVector extends TextVector{
     public void normalize(DocumentCollection dc){
         double tf = 0.0;
         double idf = 0.0;
-        double doc_count;
         String word;
         for(Map.Entry<String,Integer> entry : super.getRawVectorEntrySet()){
-            doc_count = 0.0;
             word = entry.getKey();
             tf = 0.5+0.5*((double) super.getRawFrequency(word)/super.getHighestRawFrequency());
-            for(TextVector doc : dc.getDocuments()){
-                if(doc.contains(word))
-                doc_count += 1;
-            }
-            if(doc_count == 0){
-                normalizedVector.put(word, 0.0);
-            }
+            int df = dc.getDocumentFrequency(word);
+            if (df == 0) continue;
             else{
-                idf = Math.log((double)dc.getSize()/doc_count)/Math.log(2);
+                idf = Math.log((double)dc.getSize()/df)/Math.log(2);
                 normalizedVector.put(word, tf*idf);
             }
         }

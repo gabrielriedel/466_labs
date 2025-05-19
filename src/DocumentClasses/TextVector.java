@@ -105,7 +105,9 @@ public abstract class TextVector implements Serializable{
         for(Map.Entry<Integer, TextVector> entry : documents.getEntrySet()){
             TextVector doc = entry.getValue();
             int doc_id = entry.getKey();
+            if(doc.getDistinctWordCount() > 0){
             distMap.put(doc_id, distanceAlg.findDistance(this, doc, documents));
+            }
         }
 
         List<Map.Entry<Integer, Double>> sortedEntries = new ArrayList<>(distMap.entrySet());

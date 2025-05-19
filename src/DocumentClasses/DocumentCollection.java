@@ -82,8 +82,8 @@ public class DocumentCollection implements Serializable{
     }
 
     public void normalize(DocumentCollection dc){
-        for(TextVector doc : documents.values()){
-            doc.normalize(dc);
+        for(Map.Entry<Integer, TextVector> entry : documents.entrySet()){
+            entry.getValue().normalize(dc);
         }
     }
 

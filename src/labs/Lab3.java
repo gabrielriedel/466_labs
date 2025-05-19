@@ -81,7 +81,6 @@ public class Lab3 {
                 prevQueryId = queryId;
             }
 
-            // Add the last query's documents
             if (prevQueryId != -1) {
                 humanJudgement.put(prevQueryId, new ArrayList<>(rel_docs));
             }
