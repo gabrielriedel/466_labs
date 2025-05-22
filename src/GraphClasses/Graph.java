@@ -30,7 +30,7 @@ public class Graph {
             String line = scanner.nextLine().trim();
             if (line.isEmpty()) continue;
 
-            String[] values = line.split("\\s+");
+            String[] values = line.split(",");
             int node1 = Integer.parseInt(values[0]);
             int node2 = Integer.parseInt(values[2]);
 
@@ -42,7 +42,9 @@ public class Graph {
             }
 
             cur_node = node1;
-            adjacent_nodes.add(node2);
+            if(!adjacent_nodes.contains(node2)){
+                adjacent_nodes.add(node2);
+            }
             out_count++;
             nodeSet.add(node1);
             nodeSet.add(node2);
@@ -51,6 +53,12 @@ public class Graph {
         if (cur_node != -1) {
             adjacencyList.put(cur_node, new ArrayList<>(adjacent_nodes));
             outgoingLinks.put(cur_node, out_count);
+        }
+
+        for(int i : nodeSet){
+            if(outgoingLinks.get(i) == null){
+                outgoingLinks.put(i, 0);
+            }
         }
 
         scanner.close();
