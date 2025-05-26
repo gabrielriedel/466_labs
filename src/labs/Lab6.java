@@ -2,27 +2,29 @@ package src.labs;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import src.ItemClasses.ItemSet;
+import src.ItemClasses.Rule;
 
-public class Lab5 {
+public class Lab6 {
 
-        public static ArrayList<ItemSet> transactions;
-        public static ArrayList<Integer> items;
-        public static HashMap<Integer, ArrayList<ItemSet>> frequentItemSet;
+    public static ArrayList<Rule> rules;
+    public static ArrayList<ItemSet> transactions;
+    public static ArrayList<Integer> items;
+    public static HashMap<Integer, ArrayList<ItemSet>> frequentItemSet;
 
-    public static void main(String args[]){
-
+    public static void main(String[] args){
+        rules = new ArrayList<>();
         transactions = new ArrayList<>();
         items = new ArrayList<>();
         frequentItemSet = new HashMap<>();
 
         process("./files/shopping_data.txt");
-
         findFrequentSingleItemSets();
         boolean hastItemSets = true;
         int k = 2;
@@ -31,16 +33,12 @@ public class Lab5 {
             k++;
         }
 
-        for(Map.Entry<Integer, ArrayList<ItemSet>> entry : frequentItemSet.entrySet()){
-            System.out.println("Sets of size " + entry.getKey());
-            for(ItemSet item : entry.getValue()){
-                System.out.println(item.asList());
-            }
-            System.out.println();
-        }
+        generateRules();
+
+
 
     }
-    
+
     public static void process(String filepath){
         try{
             Scanner scanner = new Scanner(new File(filepath));
@@ -123,5 +121,64 @@ public class Lab5 {
 
     }
 
+    public static ArrayList<Rule> split(ItemSet itemSet) {
+    ArrayList<Rule> ruleSet = new ArrayList<>();
+    int n = itemSet.size();
+    
+    for (int mask = 1; mask < (1 << n) - 1; mask++) {
+        ItemSet left = new ItemSet();
+        ItemSet right = new ItemSet();
+        for (int i = 0; i < n; i++) {
+            if ((mask & (1 << i)) != 0) {
+                left.add(itemSet.get(i));
+            } else {
+                right.add(itemSet.get(i));
+            }
+        }
+        Rule rule1 = new Rule(new ItemSet(left), new ItemSet(right));
+        if (!ruleSet.contains(rule1)) {
+            ruleSet.add(rule1);
+        }
+    }
 
+    return ruleSet;
+}
+
+
+    public static void generateRules(){
+        for(Map.Entry<Integer, ArrayList<ItemSet>> entry : frequentItemSet.entrySet()){
+            if(entry.getKey() >= 2){
+                for(ItemSet itemSet : entry.getValue()){
+                    ArrayList<Rule> ruleList = split(itemSet);
+                    for(Rule rule : ruleList){
+                        if(isMinConfidenceMet(rule)){
+                        System.out.println(rule.left.asList() + " " + rule.right.asList());
+                        rules.add(rule);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    public static boolean isMinConfidenceMet(Rule r){
+        ItemSet left = r.left;
+        ItemSet right = r.right;
+        int success = 0;
+        int total = 0;
+        for(ItemSet transaction : transactions){
+            if(transaction.containsAll(left)){
+                total++;
+                if(transaction.containsAll(right)){
+                    success++;
+                }
+            }
+        }
+        if((1.0*success)/total >= 0.99){
+            return true;
+        }
+        return false;
+    }
+    
 }

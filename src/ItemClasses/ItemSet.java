@@ -7,8 +7,16 @@ public class ItemSet {
     public ArrayList<Integer> itemList;
 
     public ItemSet(){
-
         itemList = new ArrayList<>();
+    }
+
+    public ItemSet(int item){
+        itemList = new ArrayList<>();
+        itemList.add(item);
+    }
+
+    public ItemSet(ItemSet other){
+        this.itemList = new ArrayList<>(other.itemList);
     }
 
     public void add(int item){
@@ -21,6 +29,23 @@ public class ItemSet {
 
     public ArrayList<Integer> asList(){
         return itemList;
+    }
+
+    public ItemSet subsetElse(ItemSet left){
+        ItemSet sub = new ItemSet();
+        for(int k = 0; k < itemList.size(); k++){
+            if(!left.contains(itemList.get(k))){
+                sub.add(itemList.get(k));}
+        }
+        return sub;
+    }
+
+    public int get(int i){
+        return itemList.get(i);
+    }
+
+    public void set(int i, int item){
+        itemList.set(i, item);
     }
 
     public boolean contains(int item){
