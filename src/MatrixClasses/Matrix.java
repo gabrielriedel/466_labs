@@ -133,5 +133,56 @@ public class Matrix {
         return splitData;
     }
 
+    public ArrayList<Integer> findAllRows(){
+        ArrayList<Integer> rows = new ArrayList<>();
+        int i = 0;
+        while(i<matrix.length){
+            rows.add(i);
+            i++;
+        }
+        return rows;
+    }
+
+    public int getCategoryAttribute(){
+        return 4;
+    }
+
+    public double findProb(int[] row, int category){
+        int catCount = 0;
+        double lambda = 1.0/matrix.length;
+        double prob = 1.0;
+        ArrayList<Integer> allRows =  findAllRows();
+        for(int[] catRows : matrix){
+            if(catRows[4] == category){
+                catCount++;
+            }
+        }
+        ArrayList<Integer> catRows = findRows(4, category, allRows);
+        int[] attributes = {0,1,2,3};
+        for(int attribute : attributes){
+            double numerator = (findFrequency(attribute, row[attribute], catRows) + lambda);
+            int uniqueCount = findDifferentValues(attribute, allRows).size();
+            double denominator = catCount+lambda*uniqueCount;
+            prob *= (1.0*numerator)/denominator;
+        }
+        int size = matrix.length;
+        prob *= (1.0*catCount)/size;
+        return prob;
+    }
+
+    public int findCategory(int[] row){
+        int[] categories = {1,2,3};
+        int bestCat = 0;
+        double bestProb = 0.0;
+        for(int category : categories){
+            double catProb = findProb(row, category);
+            if(catProb > bestProb){
+                bestProb = catProb;
+                bestCat = category;
+            }
+        }
+        return bestCat;
+    }
+
     
 }
